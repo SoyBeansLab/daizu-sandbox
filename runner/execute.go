@@ -1,5 +1,4 @@
-//package runner
-package main
+package runner
 
 import (
 	"context"
@@ -30,11 +29,3 @@ func (w *Worker) Run() {
 	log.Printf("%v", resp.ID)
 }
 
-func main() {
-	c, err := client.NewEnvClient()
-	if err != nil {
-		log.Fatalf("%v", err)
-	}
-	w := &Worker{c}
-	w.Run()
-}
