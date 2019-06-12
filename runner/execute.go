@@ -24,18 +24,35 @@ func NewWorker() (worker Worker, err error) {
 	return
 }
 
-// Run ...
-func (w *Worker) Run() {
+// CreateContainer ...
+func (w *Worker) CreateContainer(img string, volume string, memoryLimit int64, mounts []mount.Mount) (containerID string, err error) {
 	config := &container.Config{
-		Image: "python",
+		Image: img,
 	}
-	hostConfig := &container.HostConfig {}
+
+	hostConfig := &container.HostConfig{
+		Resources: container.Resources{
+			CpusetCpus: "0",
+			PidsLimit:  50,
+			Memory:     memoryLimit,
+		},
+		NetworkMode: "none",
+		Mounts:      mounts,
+	}
 	netConfig := &network.NetworkingConfig{}
-	resp, err := w.cli.ContainerCreate(context.TODO(), config, hostConfig, netConfig, "python1")
+	resp, err := w.Cli.ContainerCreate(context.TODO(), config, hostConfig, netConfig, "")
+
 	if err != nil {
 		log.Fatalf("%v", err)
 	}
 
-	log.Printf("%v", resp.ID)
+	containerID = resp.ID
+	log.Printf("Create %v", resp.ID)
+
+	return
 }
 
+// Run ...
+func (w *Worker) Run() (err error) {
+	return
+}
