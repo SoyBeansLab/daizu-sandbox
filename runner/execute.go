@@ -4,14 +4,24 @@ import (
 	"context"
 	"log"
 
-    "github.com/docker/docker/api/types/container"
-    "github.com/docker/docker/api/types/network"
+	"github.com/docker/docker/api/types/container"
+	"github.com/docker/docker/api/types/mount"
+	"github.com/docker/docker/api/types/network"
 	"github.com/moby/moby/client"
 )
 
 // Worker ...
 type Worker struct {
-	cli *client.Client
+	Cli *client.Client
+}
+
+// NewWorker ...
+func NewWorker() (worker Worker, err error) {
+	cli, err := client.NewEnvClient()
+	worker = Worker{
+		Cli: cli,
+	}
+	return
 }
 
 // Run ...
