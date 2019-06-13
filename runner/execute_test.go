@@ -2,50 +2,64 @@ package runner
 
 import (
 	"context"
-	"encoding/json"
 	"log"
 	"testing"
 
 	"github.com/docker/docker/api/types"
-	"github.com/docker/docker/api/types/filters"
-	"github.com/moby/moby/client"
+	"github.com/docker/docker/api/types/mount"
 )
 
 // getContainerList ...
-func (c *client.Client) getContainerList() (list []types.Container, err error) {
-	filter := map[string][]string{"name": {"<container_name>"}}
-	filtBytes, err := json.Marshal(filter)
-	if err != nil {
-		log.Fatalf("%v", err)
-	}
-	filt, err := filters.FromParam(string(filtBytes))
-	if err != nil {
-		log.Fatalf("%v", err)
-	}
-
+func (w *Worker) getContainerList() (list []types.Container, err error) {
 	opts := types.ContainerListOptions{
-		All:     true, // Include stopped containers
-		Quiet:   true, // return only containerID
-		Filters: filt,
+		All: true, // Include stopped containers
 	}
 
-	list, err = c.ContainerList(context.TODO(), opts)
+	list, err = w.Cli.ContainerList(context.TODO(), opts)
 	if err != nil {
-		log.Fatal("%v", err)
+		log.Println(err)
 	}
 
 	return
 }
 
-func (w *Worker) TestRun(t *testing.T) (err error) {
+func TestRun(t *testing.T) {
 	return
 }
 
-// TODO: cをWorkerにしないといけない
-func TestCreateContainer(t *testing.T) (err error) {
-	c, err := NewClient()
+func TestCreateContainer(t *testing.T) {
+	w, err := NewWorker()
 	if err != nil {
-		log.Fatalf("%v", err)
+		log.Println(err)
+	}
+
+	id, err := w.CreateContainer("python", "", 1024*1024*5, []mount.Mount{})
+	if err != nil {
+		log.Println(err)
+	}
+
+	list, err := w.getContainerList()
+	if err != nil {
+		log.Println(err)
+	}
+
+	flag := false
+	for _, i := range list {
+		if i.ID == id {
+			flag = true
+			break
+		}
+	}
+
+	if !flag {
+		t.Errorf("cannot find %v in container list", id)
+	}
+
+	// remove container
+	ctx := context.Background()
+	err = w.Cli.ContainerRemove(ctx, id, types.ContainerRemoveOptions{})
+	if err != nil {
+		log.Println(err)
 	}
 
 	return
