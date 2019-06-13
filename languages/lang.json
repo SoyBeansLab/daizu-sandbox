@@ -1,0 +1,22 @@
+{
+  "languages": {
+    "python": {
+      "version": "3.7.3",
+      "dockerfile": "python.Dockerfile",
+      "compile": ["echo"],
+      "execute": ["python", "-B"]
+    },
+    "c_gcc": {
+      "version": "9.1.0",
+      "dockerfile": "gcc.Dockerfile",
+      "compile": ["gcc", "-std=gnu11", "-O2", "-o", "a.out", "Main.c", "-lm"],
+      "execute": ["a.out"]
+    },
+    "c++_gcc": {
+      "version": "9.1.0",
+      "dockerfile": "gcc.Dockerfile",
+      "compile": ["g++", "-std=gnu++03", "-O2", "-o a.out", "Main.cpp"],
+      "execute": ["a.out"]
+    }
+  }
+}
