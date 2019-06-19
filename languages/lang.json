@@ -4,7 +4,7 @@
       "version": "3.7.3",
       "dockerfile": "python.Dockerfile",
       "compile": ["echo"],
-      "execute": ["python", "-B"]
+      "execute": ["python", "-B", "Main.py"]
     },
     "c_gcc": {
       "version": "9.1.0",
