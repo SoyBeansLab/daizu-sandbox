@@ -2,19 +2,16 @@ package runner
 
 // Job ...
 type Job struct {
+	Language    string
 	Image       string
 	Source      string
-	TimeLimit   int
-	MemoryLimit int
+	TimeLimit   int64
+	MemoryLimit int64
+	Task
 }
 
-// NewJob ...
-func NewJob(image, source string, tl, ml int) (j Job) {
-	j = Job{
-		Image:       image,
-		Source:      source,
-		TimeLimit:   tl,
-		MemoryLimit: ml,
-	}
-	return
+// Task ...
+type Task struct {
+	CompileCmd []string `json:"compile"`
+	ExecuteCmd []string `json:"execute"`
 }
