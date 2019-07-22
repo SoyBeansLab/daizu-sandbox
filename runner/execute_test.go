@@ -41,8 +41,6 @@ func TestRun(t *testing.T) {
 	if err != nil {
 		t.Errorf("%v", err)
 	}
-
-	return
 }
 
 func TestCreateContainer(t *testing.T) {
@@ -79,6 +77,4 @@ func TestCreateContainer(t *testing.T) {
 			log.Println(err)
 		}
 	}
-
-	return
 }
