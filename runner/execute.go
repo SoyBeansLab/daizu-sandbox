@@ -60,6 +60,9 @@ func (w *Worker) Run(j Job) (err error) {
 		j.MemoryLimit,
 		[]mount.Mount{},
 	)
+	if err != nil {
+		log.Fatalf("failed create container... %v\n", err)
+	}
 
 	atcOpt := dtypes.ContainerAttachOptions{
 		Stream: true,
@@ -70,7 +73,7 @@ func (w *Worker) Run(j Job) (err error) {
 
 	hijacked, err := w.Cli.ContainerAttach(context.TODO(), containerID, atcOpt)
 	if err != nil {
-		log.Printf("failed hijack... %v\n", err)
+		log.Fatalf("failed hijack... %v\n", err)
 	}
 	log.Println(hijacked)
 	return
