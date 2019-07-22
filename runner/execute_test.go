@@ -24,6 +24,24 @@ func (w *Worker) getContainerList() (list []types.Container, err error) {
 }
 
 func TestRun(t *testing.T) {
+	job := Job{
+		Language: "python",
+		Image: "python",
+		Source: "./",
+		TimeLimit: 2,
+		MemoryLimit: 1024*1024*1024*1024,
+	}
+
+	w, err := NewWorker()
+	if err != nil {
+		log.Println(err)
+	}
+
+	err = w.Run(job)
+	if err != nil {
+		t.Errorf("%v", err)
+	}
+
 	return
 }
 
@@ -53,13 +71,13 @@ func TestCreateContainer(t *testing.T) {
 
 	if !flag {
 		t.Errorf("cannot find %v in container list", id)
-	}
-
-	// remove container
-	ctx := context.Background()
-	err = w.Cli.ContainerRemove(ctx, id, types.ContainerRemoveOptions{})
-	if err != nil {
-		log.Println(err)
+	} else {
+		// remove container
+		ctx := context.Background()
+		err = w.Cli.ContainerRemove(ctx, id, types.ContainerRemoveOptions{})
+		if err != nil {
+			log.Println(err)
+		}
 	}
 
 	return

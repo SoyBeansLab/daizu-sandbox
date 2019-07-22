@@ -4,6 +4,7 @@ import (
 	"context"
 	"log"
 
+	dtypes "github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/container"
 	"github.com/docker/docker/api/types/mount"
 	"github.com/docker/docker/api/types/network"
@@ -53,6 +54,24 @@ func (w *Worker) CreateContainer(img string, memoryLimit int64, mounts []mount.M
 }
 
 // Run ...
-func (w *Worker) Run() (err error) {
+func (w *Worker) Run(j Job) (err error) {
+	containerID, err := w.CreateContainer(
+		j.Image,
+		j.MemoryLimit,
+		[]mount.Mount{},
+	)
+
+	atcOpt := dtypes.ContainerAttachOptions{
+		Stream: true,
+		Stdin:  true,
+		Stdout: true,
+		Stderr: true,
+	}
+
+	hijacked, err := w.Cli.ContainerAttach(context.TODO(), containerID, atcOpt)
+	if err != nil {
+		log.Printf("failed hijack... %v\n", err)
+	}
+	log.Println(hijacked)
 	return
 }
