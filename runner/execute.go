@@ -32,9 +32,10 @@ func NewWorker() (worker Worker, err error) {
 }
 
 // CreateContainer ...
-func (w *Worker) CreateContainer(img string, memoryLimit int64, mounts []mount.Mount) (containerID string, err error) {
+func (w *Worker) CreateContainer(img string, memoryLimit int64, mounts []mount.Mount, cmd []string) (containerID string, err error) {
 	config := &container.Config{
 		Image: img,
+		Cmd:          cmd,
 	}
 
 	hostConfig := &container.HostConfig{

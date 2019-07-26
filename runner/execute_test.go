@@ -49,7 +49,7 @@ func TestCreateContainer(t *testing.T) {
 		log.Println(err)
 	}
 
-	id, err := w.CreateContainer("python", 1024*1024*5, []mount.Mount{})
+	id, err := w.CreateContainer("python", 1024*1024*5, []mount.Mount{}, []string{})
 	if err != nil {
 		log.Println(err)
 	}
