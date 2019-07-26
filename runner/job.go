@@ -7,7 +7,7 @@ type Job struct {
 	Source      string
 	TimeLimit   int64
 	MemoryLimit int64
-	Task
+	Cmd         []string
 }
 
 // Task ...
