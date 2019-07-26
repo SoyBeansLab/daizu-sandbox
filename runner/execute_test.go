@@ -25,11 +25,12 @@ func (w *Worker) getContainerList() (list []types.Container, err error) {
 
 func TestRun(t *testing.T) {
 	job := Job{
-		Language: "python",
-		Image: "python",
-		Source: "./",
-		TimeLimit: 2,
-		MemoryLimit: 1024*1024*1024*1024,
+		Language:    "python",
+		Image:       "daizu-python",
+		Source:      "./",
+		TimeLimit:   2,
+		MemoryLimit: 1024 * 1024 * 512,
+		Cmd:         []string{"./run"},
 	}
 
 	w, err := NewWorker()
