@@ -16,6 +16,12 @@ type Worker struct {
 	Cli *client.Client
 }
 
+// constaints ...
+const (
+	Workspace   = "/tmp/daizu/"
+	MemoryLimit = 1024 * 1024 * 512 // nearly equal 512MB  TODO: Atcoderでは1024MB
+)
+
 // NewWorker ...
 func NewWorker() (worker Worker, err error) {
 	cli, err := client.NewEnvClient()
