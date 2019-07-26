@@ -33,17 +33,24 @@ func NewWorker() (worker Worker, err error) {
 
 // CreateContainer ...
 func (w *Worker) CreateContainer(img string, memoryLimit int64, mounts []mount.Mount, cmd []string) (containerID string, err error) {
+	// https://godoc.org/github.com/docker/docker/api/types/container#Config
 	config := &container.Config{
-		Image: img,
+		Image:        img,
+		WorkingDir:   Workspace,
 		Cmd:          cmd,
+		Tty:          false,
+		AttachStdin:  true,
+		AttachStdout: true,
+		AttachStderr: true,
 	}
 
 	hostConfig := &container.HostConfig{
 		Resources: container.Resources{
 			CpusetCpus: "0",
-			PidsLimit:  50,
+			PidsLimit:  0,
 			Memory:     memoryLimit,
 		},
+		AutoRemove: true,
 		NetworkMode: "none",
 		Mounts:      mounts,
 	}
@@ -66,6 +73,7 @@ func (w *Worker) Run(j Job) (err error) {
 		j.Image,
 		j.MemoryLimit,
 		[]mount.Mount{},
+		j.Task.ExecuteCmd,
 	)
 	if err != nil {
 		log.Fatalf("failed create container... %v\n", err)
@@ -82,6 +90,7 @@ func (w *Worker) Run(j Job) (err error) {
 	if err != nil {
 		log.Fatalf("failed hijack... %v\n", err)
 	}
-	log.Println(hijacked)
+	defer hijacked.Close()
+
 	return
 }
