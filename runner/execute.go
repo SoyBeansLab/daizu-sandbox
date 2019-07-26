@@ -50,7 +50,6 @@ func (w *Worker) CreateContainer(img string, memoryLimit int64, mounts []mount.M
 			PidsLimit:  0,
 			Memory:     memoryLimit,
 		},
-		AutoRemove: true,
 		NetworkMode: "none",
 		Mounts:      mounts,
 	}
@@ -73,7 +72,7 @@ func (w *Worker) Run(j Job) (err error) {
 		j.Image,
 		j.MemoryLimit,
 		[]mount.Mount{},
-		j.Task.ExecuteCmd,
+		j.Cmd,
 	)
 	if err != nil {
 		log.Fatalf("failed create container... %v\n", err)
@@ -86,11 +85,15 @@ func (w *Worker) Run(j Job) (err error) {
 		Stderr: true,
 	}
 
-	hijacked, err := w.Cli.ContainerAttach(context.TODO(), containerID, atcOpt)
+	hijacked, err := w.Cli.ContainerAttach(context.Background(), containerID, atcOpt)
 	if err != nil {
 		log.Fatalf("failed hijack... %v\n", err)
 	}
 	defer hijacked.Close()
 
+	err = w.Cli.ContainerStart(context.Background(), containerID, dtypes.ContainerStartOptions{})
+	if err != nil {
+		log.Fatalf("failed start... %v\n", err)
+	}
 	return
 }
