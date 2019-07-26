@@ -1,0 +1,16 @@
+#!/bin/sh
+
+
+## Def
+compile () {
+  return
+}
+
+execute () {
+  python -B Main.py
+}
+
+
+## Exec
+compile
+execute
