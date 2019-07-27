@@ -74,7 +74,7 @@ func (w *Worker) CreateContainer(img string, memoryLimit int64, mounts []mount.M
 }
 
 // Run ...
-func (w *Worker) Run(j Job) (err error) {
+func (w *Worker) Run(j *Job) (err error) {
 	containerID, err := w.CreateContainer(
 		j.Image,
 		j.MemoryLimit,

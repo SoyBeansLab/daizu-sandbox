@@ -38,7 +38,7 @@ func TestRun(t *testing.T) {
 		log.Println(err)
 	}
 
-	err = w.Run(job)
+	err = w.Run(&job)
 	if err != nil {
 		t.Errorf("%v", err)
 	}
