@@ -25,6 +25,11 @@ const (
 // NewWorker ...
 func NewWorker() (worker Worker, err error) {
 	cli, err := client.NewEnvClient()
+	if err != nil {
+		log.Fatalf("failed create new client... %v\n", err)
+		return
+	}
+
 	worker = Worker{
 		Cli: cli,
 	}
