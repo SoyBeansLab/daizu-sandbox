@@ -1,5 +1,7 @@
 package runner
 
+import "os"
+
 // Job ...
 type Job struct {
 	Language    string
@@ -8,6 +10,8 @@ type Job struct {
 	TimeLimit   int64
 	MemoryLimit int64
 	Cmd         []string
+	Stdout      *os.File
+	Stderr      *os.File
 }
 
 // Task ...
