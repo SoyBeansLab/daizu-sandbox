@@ -1,16 +1,35 @@
 #!/bin/sh
 
-
-## Def
-compile () {
-  return
+## Definition
+compile () {  
+  # The file name must be "Main + extension"
+  # If you do not need compilation please return 0.
+  return 0
 }
 
 execute () {
+  # The file name to execute is "Main + extension"
+  # If it is a binary file, no extension is required.
   python -B Main.py
 }
 
 
-## Exec
+## Execute
 compile
-execute
+
+input_dir="./input/"
+output_dir="./output/"
+
+if [ ! -d $input_dir ]; then
+  echo "Input dir not found"
+  exit 1
+fi
+
+if [ ! -d $output_dir ]; then
+  mkdir $output_dir
+fi
+
+for file in `ls ${input_dir}`; do
+  out_file_name=`echo $file | cut -d "." -f 1`
+  execute < "$input_dir$file" > "$output_dir$out_file_name.out"
+done
