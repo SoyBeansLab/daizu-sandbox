@@ -1,15 +1,14 @@
 language: go
-
 go:
-  - "1.12.5"
-
+- 1.12.5
 os:
-  - linux
+- linux
 dist: trusty
-
 sudo: false
 install: true
-
 script:
-  - env GO111MODULE=on go build
-  - env GO111MODULE=on go test
+- env GO111MODULE=on go build
+- env GO111MODULE=on go test
+notifications:
+  slack:
+    secure: mZ73kCsc5BEflknZvskB693nidN29kMBV7IzKXzLtpGObNdR94mGZvmIl7WXCVMcWyAS8Su9KjzebP+cbORIhQkyx1pwJpw/DUGWvQfT3TwYSr2VNr+tIWquMeHRq1xYJzZrWS93xDllB970kHQ8YC3tqbbIv3pQGGuPG+1q3WtGvFl1J+oFCmmMFI5UMZ4Po4JP4vGAvEvsxZ9Frn8mAekxxqiycNBGyV4Sr1GScuMEVtqWz+f1yVXOQbEP35+P5+kWYr/VJFXZlpded3f0QJGj2TLOJW3teLjY04jMExkp39bLsWJAwGxys1f2UBmATYeeQuaIW/6Q8PHpFWsoO0iK/tQ9SuW9uC0UPDRJRmH550J+Z9+D/meGFLPBYe+hq6wOz9LwuWmkn1U1g95CfgofRtKbSDzXrDF3IosU4sJUIVfDrkV5DDAPDOCswwILFuKOMLL3XlTaoVRuklGH0yJKnO4TjW99oe3QC7mNznd5fTR4+C799z5CTH7v3igzt2d34Y9XJrWAKNFnlcYmw9+w/u+liR3tLvb+SsS5a7J746NtkuPOR0EhLdGz6bI23iGeb5KLb8LNuhMg/l4hZc50fEwCiJAvF/WqUxx7mliBWwKqRA7tAbx5943rSE1XkraVOXtdQ4mWJ/t+HH5qKtgisS6gUytBlpdPqRiAgUs=
