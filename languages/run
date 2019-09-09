@@ -2,15 +2,17 @@
 
 ## Definition
 compile () {  
+  # Please write an compile command here
   # The file name must be "Main + extension"
   # If you do not need compilation please return 0.
   return 0
 }
 
 execute () {
+  # Please write an execution command here
   # The file name to execute is "Main + extension"
   # If it is a binary file, no extension is required.
-  python -B Main.py
+  return 0
 }
 
 

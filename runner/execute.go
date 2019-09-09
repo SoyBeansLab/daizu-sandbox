@@ -2,6 +2,7 @@ package runner
 
 import (
 	"context"
+	"io/ioutil"
 	"log"
 
 	dtypes "github.com/docker/docker/api/types"
@@ -9,6 +10,7 @@ import (
 	"github.com/docker/docker/api/types/mount"
 	"github.com/docker/docker/api/types/network"
 	"github.com/moby/moby/client"
+	"github.com/moby/moby/pkg/stdcopy"
 )
 
 // Worker ...
@@ -25,6 +27,11 @@ const (
 // NewWorker ...
 func NewWorker() (worker Worker, err error) {
 	cli, err := client.NewEnvClient()
+	if err != nil {
+		log.Fatalf("failed create new client... %v\n", err)
+		return
+	}
+
 	worker = Worker{
 		Cli: cli,
 	}
@@ -67,7 +74,7 @@ func (w *Worker) CreateContainer(img string, memoryLimit int64, mounts []mount.M
 }
 
 // Run ...
-func (w *Worker) Run(j Job) (err error) {
+func (w *Worker) Run(j *Job) (err error) {
 	containerID, err := w.CreateContainer(
 		j.Image,
 		j.MemoryLimit,
@@ -95,5 +102,20 @@ func (w *Worker) Run(j Job) (err error) {
 	if err != nil {
 		log.Fatalf("failed start... %v\n", err)
 	}
+
+	j.Stdout, err = ioutil.TempFile("", containerID+"out")
+	if err != nil {
+		log.Fatal(err)
+	}
+	j.Stderr, err = ioutil.TempFile("", containerID+"err")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	_, err = stdcopy.StdCopy(j.Stdout, j.Stderr, hijacked.Reader)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	return
 }
