@@ -14,7 +14,6 @@ execute () {
   ./Main.out
 }
 
-
 ## Execute
 compile
 
@@ -22,7 +21,7 @@ input_dir="./input/"
 output_dir="./output/"
 
 if [ ! -d $input_dir ]; then
-  echo "Input dir not found"
+  echo "$input_dir not found"
   exit 1
 fi
 
@@ -34,3 +33,27 @@ for file in `ls ${input_dir}`; do
   out_file_name=`echo $file | cut -d "." -f 1`
   execute < "$input_dir$file" > "$output_dir$out_file_name.out"
 done
+
+## Test
+diff_checker_version="0.0.1"
+diff_checker_url="https://github.com/SoyBeansLab/daizu-sandbox/releases/download/$diff_checker_version/diff-checker"
+diff_checker_path="/diff_checker"
+answer_dir="./answer/"
+
+if [ ! -d ${answer_dir} ]; then
+  echo "$answer_dir not found."
+  exit 1
+fi
+
+curl -L -fSsl "$diff_checker_url" -o "$diff_checker_path" && chmod +x "$diff_checker_path"
+
+count=0
+for file in `ls ${output_dir}`; do  # Check for diffs in answer and output
+  file_name=`echo $file | cut -d "." -f 1`
+  $diff_checker_path "$output_dir$file" "$answer_dir$file_name"
+  if [ 0 -eq $? ]; then
+    count=`expr $count + 1`
+  fi
+done
+
+echo $count
