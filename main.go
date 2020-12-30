@@ -1,9 +1,16 @@
 package main
 
 import (
-	"fmt"
+	"log"
+
+	"go.uber.org/zap"
 )
 
 func main() {
-	fmt.Println("Hello World!")
+	logger, err := zap.NewDevelopment()
+	if err != nil {
+		log.Fatalf("can't initialize zap logger: %v", err)
+	}
+
+	logger.Info("running DAIZU ONLINE JUDGE SANDBOX")
 }
