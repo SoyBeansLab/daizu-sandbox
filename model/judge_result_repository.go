@@ -1,5 +1,5 @@
 package model
 
 type JudgeResultRepository interface {
-	UpdateJudgeResult(*JudgeResult)
+	UpdateJudgeResult(*JudgeResult) error
 }

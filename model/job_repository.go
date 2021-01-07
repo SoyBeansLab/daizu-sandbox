@@ -1,5 +1,5 @@
 package model
 
 type JobRepository interface {
-	GetJob()
+	GetJob() (*Job, error)
 }

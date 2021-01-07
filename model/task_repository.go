@@ -1,5 +1,5 @@
 package model
 
 type TaskRepository interface {
-	FindBySubmissionID(id string) *Task
+	FindBySubmissionID(id string) (*Task, error)
 }
